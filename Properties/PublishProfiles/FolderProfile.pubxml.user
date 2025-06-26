@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- https://go.microsoft.com/fwlink/?LinkID=208121. -->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>C:\MyFiles\EDG\partnumbersapi\bin\Release\net8.0\publish\</_PublishTargetUrl>
+    <History>True|2025-06-24T01:31:56.5480204Z||;True|2025-06-23T19:27:56.0994817-06:00||;True|2025-06-23T19:26:01.8816698-06:00||;True|2025-06-23T19:23:19.5897627-06:00||;True|2025-06-23T19:20:52.9211597-06:00||;True|2025-06-23T19:17:41.4670624-06:00||;True|2025-06-23T19:15:39.3959037-06:00||;True|2025-06-23T19:15:22.8019085-06:00||;True|2025-06-23T18:28:00.3156451-06:00||;True|2025-06-23T18:21:32.2358231-06:00||;True|2025-06-23T18:17:06.0627205-06:00||;True|2025-06-23T18:12:11.2892752-06:00||;False|2025-06-23T18:11:39.3664729-06:00||;True|2025-06-23T16:42:17.3739559-06:00||;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>
