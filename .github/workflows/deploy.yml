@@ -1,0 +1,31 @@
+name: Deploy to EC2 via CodeDeploy
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  deploy:
+    name: 🚀 CodeDeploy to EC2
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🔄 Checkout code
+        uses: actions/checkout@v3
+
+      - name: 🔐 Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1  # ← cámbialo si tu región es otra
+
+      - name: 🛰️ Trigger deployment with CodeDeploy
+        run: |
+          aws deploy create-deployment \
+            --application-name RDOPartNumbers \
+            --deployment-group-name RDOPartNumbers-Staging \
+            --github-location repository=ElPepeMtz1981/RDOPartNumbers,commitId=${{ github.sha }} \
+            --deployment-config-name CodeDeployDefault.AllAtOnce \
+            --description "Deploy triggered by GitHub Actions"
