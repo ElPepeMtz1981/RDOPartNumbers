@@ -7,6 +7,8 @@ echo "🔧 Ejecutando after_install.sh..."
 export DOTNET_ROOT=$HOME/.dotnet
 export PATH=$HOME/.dotnet:$PATH
 
+chmod -R u+rwX /home/ubuntu/rdopartnumberssc
+
 # 👉 Navega al código fuente
 cd /home/ubuntu/rdopartnumberssc
 
