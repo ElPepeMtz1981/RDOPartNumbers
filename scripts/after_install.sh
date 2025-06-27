@@ -3,7 +3,7 @@ set -e
 
 echo "🔧 Ejecutando after_install.sh..."
 
-# 👉 Exporta las variables para usar el SDK correcto
+# Exporta las variables para usar el SDK correcto
 export DOTNET_ROOT=$HOME/.dotnet
 export PATH=$HOME/.dotnet:$PATH
 
