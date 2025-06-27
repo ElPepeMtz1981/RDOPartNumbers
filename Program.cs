@@ -14,7 +14,6 @@ builder.Services.AddCors(options =>
     });
 });
 
-
 builder.Services.AddControllers();
 builder.Services.AddDbContext<PartNumbersDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("PartNumbers")));
 builder.Services.AddEndpointsApiExplorer();
