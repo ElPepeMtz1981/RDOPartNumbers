@@ -3,7 +3,7 @@
 <Project>
   <PropertyGroup>
     <_PublishTargetUrl>C:\MyFiles\EDG\RDOAPIS\RDOMES\PartNumbers\bin\Release\net8.0\publish\</_PublishTargetUrl>
-    <History>True|2025-06-26T20:25:58.6834276Z||;</History>
+    <History>True|2025-06-27T18:22:12.5009409Z||;True|2025-06-26T14:25:58.6834276-06:00||;</History>
     <LastFailureDetails />
   </PropertyGroup>
 </Project>
