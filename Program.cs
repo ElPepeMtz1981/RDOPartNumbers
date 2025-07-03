@@ -36,7 +36,6 @@ else
     Console.WriteLine($"✅ Conexión detectada desde entorno: {connection.Split(';')[0]}");
 }
 
-
 var app = builder.Build();
 
 //app.UseRouting();
