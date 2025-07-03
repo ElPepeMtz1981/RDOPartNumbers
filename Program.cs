@@ -4,11 +4,21 @@ using PartNumbers.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("AllowLocalhostReact", policy =>
+//    {
+//        policy.WithOrigins("http://localhost:3000", "https://staging.d1bfq3uhowhk5h.amplifyapp.com/", "http://ec2-3-19-54-137.us-east-2.compute.amazonaws.com") // <--- React app local
+//              .AllowAnyHeader()
+//              .AllowAnyMethod();
+//    });
+//});
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowLocalhostReact", policy =>
+    options.AddPolicy("AllowAllOrigins", policy =>
     {
-        policy.WithOrigins("http://localhost:3000", "https://staging.d1bfq3uhowhk5h.amplifyapp.com/") // <--- React app local
+        policy.AllowAnyOrigin()
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -55,7 +65,7 @@ app.UseMiddleware<ExceptionMiddleware>();
 //app.UseSwagger();
 //app.UseSwaggerUI();
 
-app.UseCors("AllowLocalhostReact");
+app.UseCors("AllowAllOrigins");
 
 //app.UseHttpsRedirection();
 app.UseAuthorization();
