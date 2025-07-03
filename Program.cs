@@ -4,11 +4,20 @@ using PartNumbers.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("AllowLocalhostReact", policy =>
+//    {
+//        policy.WithOrigins("http://localhost:3000", "https://staging.d1bfq3uhowhk5h.amplifyapp.com/") // <--- React app local
+//              .AllowAnyHeader()
+//              .AllowAnyMethod();
+//    });
+//});
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowLocalhostReact", policy =>
+    options.AddPolicy("AllowAllOrigins", policy =>
     {
-        policy.WithOrigins("http://localhost:3000", "https://staging.d1bfq3uhowhk5h.amplifyapp.com/") // <--- React app local
+        policy.AllowAnyOrigin()
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
