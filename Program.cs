@@ -54,7 +54,7 @@ app.UseMiddleware<ExceptionMiddleware>();
 //app.UseSwagger();
 //app.UseSwaggerUI();
 
-app.UseCors("AllowLocalhostReact");
+app.UseCors("AllowAllOrigins");
 
 //app.UseHttpsRedirection();
 app.UseAuthorization();
