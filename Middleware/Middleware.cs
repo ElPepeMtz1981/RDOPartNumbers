@@ -18,7 +18,7 @@ namespace PartNumbers.Middleware
         {
             try
             {
-                await _next(context); // Continúa con el siguiente middleware
+                await _next(context);
             }
             catch (Exception ex)
             {

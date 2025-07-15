@@ -9,14 +9,14 @@ namespace ProductosApi.Controllers;
 [Route("api/[controller]")]
 public class PartNumbersController : ControllerBase
 {
-    private readonly PartNumbersDbContext _context;
+    private readonly PartNumbersDbContext context;
 
-    private readonly ILogger<PartNumbersController> _logger;
+    private readonly ILogger<PartNumbersController> logger;
 
     public PartNumbersController(PartNumbersDbContext context, ILogger<PartNumbersController> logger)
     {
-        _context = context;
-        _logger = logger;
+        this.context = context;
+        this.logger = logger;
     }
 
     // PUT api/PartNumbers/{id}
@@ -28,22 +28,22 @@ public class PartNumbersController : ControllerBase
             if (id != updatedPart.Id)
                 return BadRequest("El Id proporcionado no coincide con el Id del Numero de Parte.");
 
-            var existingPart = await _context.PartNumbers.FindAsync(id);
+            var existingPart = await context.PartNumbers.FindAsync(id);
             if (existingPart == null)
                 return NotFound($"No se encontró PartNumber con Id: {id}.");
 
             // Normalización y validación opcional
-            var nuevoPN = updatedPart.PartNumber.Trim().ToLower();
-            var existeOtro = await _context.PartNumbers
-                .AnyAsync(p => p.Id != id && p.PartNumber.Trim().ToLower() == nuevoPN);
+            var newPartNumber = updatedPart.PartNumber.Trim().ToLower();
+            var alreadyExist = await context.PartNumbers
+                .AnyAsync(p => p.Id != id && p.PartNumber.Trim().ToLower() == newPartNumber);
 
-            if (existeOtro)
+            if (alreadyExist)
                 return Conflict($"Ya existe otro Numero de Parte: \"{updatedPart.PartNumber}\".");
 
             existingPart.PartNumber = updatedPart.PartNumber;
             existingPart.Description = updatedPart.Description;
 
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
             return NoContent();
         }
         catch (DbUpdateException ex)
@@ -64,7 +64,7 @@ public class PartNumbersController : ControllerBase
     {
         try
         {
-            var part = await _context.PartNumbers.FindAsync(id);
+            var part = await context.PartNumbers.FindAsync(id);
             if (part == null)
                 return NotFound($"No se encontró Numero de Parte con Id: {id}.");
             return Ok(part);
@@ -88,7 +88,7 @@ public class PartNumbersController : ControllerBase
         try
         {
             var pnNorm = pn.Trim().ToLower();
-            var part = await _context.PartNumbers
+            var part = await context.PartNumbers
                 .FirstOrDefaultAsync(p => p.PartNumber.Trim().ToLower() == pnNorm);
 
             if (part == null)
@@ -107,7 +107,7 @@ public class PartNumbersController : ControllerBase
         }
     }
 
-    [HttpPost]
+    [HttpPost("new")]
     public async Task<ActionResult<PartNumberClass>> PostPartNumber(PartNumberClass partNumber)
     {
         try
@@ -117,10 +117,9 @@ public class PartNumbersController : ControllerBase
                 return BadRequest(ModelState);
             }
 
-            // Normaliza el nombre para evitar que "Camiseta" y "camiseta" se consideren distintos
             var nombreNormalizado = partNumber.PartNumber.Trim().ToLower();
 
-            var existe = await _context.PartNumbers
+            var existe = await context.PartNumbers
                 .AnyAsync(p => p.PartNumber.Trim().ToLower() == nombreNormalizado);
 
             if (existe)
@@ -132,8 +131,8 @@ public class PartNumbersController : ControllerBase
                 Description = partNumber.Description
             };
 
-            _context.PartNumbers.Add(pn);
-            await _context.SaveChangesAsync();
+            context.PartNumbers.Add(pn);
+            await context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetPartNumbers), new { id = partNumber.Id }, partNumber);
         }
@@ -154,7 +153,7 @@ public class PartNumbersController : ControllerBase
     {
         try
         {
-            return await _context.PartNumbers.ToListAsync();
+            return await context.PartNumbers.ToListAsync();
         }
         catch (DbUpdateException ex)
         {
@@ -173,14 +172,14 @@ public class PartNumbersController : ControllerBase
     {
         try
         {
-            var part = await _context.PartNumbers.FindAsync(id);
+            var part = await context.PartNumbers.FindAsync(id);
             if (part == null)
             {
                 return NotFound($"No se encontró Numero de Parte con Id: {id}.");
             }
 
-            _context.PartNumbers.Remove(part);
-            await _context.SaveChangesAsync();
+            context.PartNumbers.Remove(part);
+            await context.SaveChangesAsync();
 
             return NoContent();
         }
