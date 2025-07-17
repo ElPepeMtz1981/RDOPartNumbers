@@ -1,21 +1,21 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using PartNumbers.Data;
-using PartNumbers.Models;
+using RDOXMES.Data;
+using RDOXMES.Models;
 
-namespace ProductosApi.Controllers;
+namespace RDOXMES.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 public class PartNumbersController : ControllerBase
 {
-    private readonly PartNumbersDbContext context;
+    private readonly PartNumbersDbContext partNumberDbContext;
 
     private readonly ILogger<PartNumbersController> logger;
 
-    public PartNumbersController(PartNumbersDbContext context, ILogger<PartNumbersController> logger)
+    public PartNumbersController(PartNumbersDbContext partNumberDbContext, ILogger<PartNumbersController> logger)
     {
-        this.context = context;
+        this.partNumberDbContext = partNumberDbContext;
         this.logger = logger;
     }
 
@@ -28,13 +28,13 @@ public class PartNumbersController : ControllerBase
             if (id != updatedPart.Id)
                 return BadRequest("El Id proporcionado no coincide con el Id del Numero de Parte.");
 
-            var existingPart = await context.PartNumbers.FindAsync(id);
+            var existingPart = await partNumberDbContext.PartNumbers.FindAsync(id);
             if (existingPart == null)
                 return NotFound($"No se encontró PartNumber con Id: {id}.");
 
             // Normalización y validación opcional
             var newPartNumber = updatedPart.PartNumber.Trim().ToLower();
-            var alreadyExist = await context.PartNumbers
+            var alreadyExist = await partNumberDbContext.PartNumbers
                 .AnyAsync(p => p.Id != id && p.PartNumber.Trim().ToLower() == newPartNumber);
 
             if (alreadyExist)
@@ -43,7 +43,7 @@ public class PartNumbersController : ControllerBase
             existingPart.PartNumber = updatedPart.PartNumber;
             existingPart.Description = updatedPart.Description;
 
-            await context.SaveChangesAsync();
+            await partNumberDbContext.SaveChangesAsync();
             return NoContent();
         }
         catch (DbUpdateException ex)
@@ -64,7 +64,7 @@ public class PartNumbersController : ControllerBase
     {
         try
         {
-            var part = await context.PartNumbers.FindAsync(id);
+            var part = await partNumberDbContext.PartNumbers.FindAsync(id);
             if (part == null)
                 return NotFound($"No se encontró Numero de Parte con Id: {id}.");
             return Ok(part);
@@ -87,22 +87,23 @@ public class PartNumbersController : ControllerBase
     {
         try
         {
-            var pnNorm = pn.Trim().ToLower();
-            var part = await context.PartNumbers
-                .FirstOrDefaultAsync(p => p.PartNumber.Trim().ToLower() == pnNorm);
+            var partnumberUpper = pn.Trim().ToLower();
+            var partNumber = await partNumberDbContext.PartNumbers
+                .FirstOrDefaultAsync(p => p.PartNumber.Trim().ToLower() == partnumberUpper);
 
-            if (part == null)
+            if (partNumber == null)
+            {
                 return NotFound($"No se encontró Numero de Parte con: \"{pn}\".");
-            return Ok(part);
+            }
+
+            return Ok(partNumber);
         }
         catch (DbUpdateException ex)
         {
-            // Error al guardar en la base de datos
             return StatusCode(503, new { mensaje = "Error al acceder a la base de datos. Intenta más tarde.", detalle = ex.Message });
         }
         catch (Exception ex)
-        {
-            // Cualquier otro error inesperado
+        {         
             return StatusCode(500, new { mensaje = "Error interno del servidor", detalle = ex.Message });
         }
     }
@@ -119,7 +120,7 @@ public class PartNumbersController : ControllerBase
 
             var nombreNormalizado = partNumber.PartNumber.Trim().ToLower();
 
-            var existe = await context.PartNumbers
+            var existe = await partNumberDbContext.PartNumbers
                 .AnyAsync(p => p.PartNumber.Trim().ToLower() == nombreNormalizado);
 
             if (existe)
@@ -131,8 +132,8 @@ public class PartNumbersController : ControllerBase
                 Description = partNumber.Description
             };
 
-            context.PartNumbers.Add(pn);
-            await context.SaveChangesAsync();
+            partNumberDbContext.PartNumbers.Add(pn);
+            await partNumberDbContext.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetPartNumbers), new { id = partNumber.Id }, partNumber);
         }
@@ -153,7 +154,7 @@ public class PartNumbersController : ControllerBase
     {
         try
         {
-            return await context.PartNumbers.ToListAsync();
+            return await partNumberDbContext.PartNumbers.ToListAsync();
         }
         catch (DbUpdateException ex)
         {
@@ -172,14 +173,14 @@ public class PartNumbersController : ControllerBase
     {
         try
         {
-            var part = await context.PartNumbers.FindAsync(id);
+            var part = await partNumberDbContext.PartNumbers.FindAsync(id);
             if (part == null)
             {
                 return NotFound($"No se encontró Numero de Parte con Id: {id}.");
             }
 
-            context.PartNumbers.Remove(part);
-            await context.SaveChangesAsync();
+            partNumberDbContext.PartNumbers.Remove(part);
+            await partNumberDbContext.SaveChangesAsync();
 
             return NoContent();
         }

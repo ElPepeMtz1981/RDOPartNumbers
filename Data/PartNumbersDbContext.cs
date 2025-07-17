@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using PartNumbers.Models;
+using RDOXMES.Models;
 
-namespace PartNumbers.Data;
+namespace RDOXMES.Data;
 
 public class PartNumbersDbContext : DbContext
 {

@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Text.Json;
 
-namespace PartNumbers.Middleware
+namespace RDOXMES.Middleware
 {
     public class ExceptionMiddleware
     {

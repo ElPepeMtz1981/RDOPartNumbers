@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PartNumbers.Data;
-using PartNumbers.Middleware;
+using RDOXMES.Data;
+using RDOXMES.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,7 +55,7 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 
 app.UseCors("AllowAllOrigins");
 
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
