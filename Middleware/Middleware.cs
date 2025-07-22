@@ -22,7 +22,7 @@ public class ExceptionMiddleware
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Ocurrió una excepción no controlada");
+            _logger.LogError(ex, "Not handle exception");
 
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
