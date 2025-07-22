@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RDOXMES.Data;
-using RDOXMES.Middleware;
+using RDOXMES.PartNumbers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,11 +28,11 @@ var connection = builder.Configuration.GetConnectionString("PartNumbers");
 if (string.IsNullOrWhiteSpace(connection) || connection.Contains("USE_ENV_VARIABLE"))
 {
     builder.Logging.AddConsole();
-    Console.WriteLine("⚠️  La cadena de conexión no fue cargada desde el entorno.");
+    Console.WriteLine("La cadena de conexión no fue cargada desde el entorno.");
 }
 else
 {
-    Console.WriteLine($"✅ Conexión detectada desde entorno: {connection.Split(';')[0]}");
+    Console.WriteLine($"Conexión detectada desde entorno: {connection.Split(';')[0]}");
 }
 
 var app = builder.Build();
@@ -50,8 +49,6 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-
 
 app.UseCors("AllowAllOrigins");
 

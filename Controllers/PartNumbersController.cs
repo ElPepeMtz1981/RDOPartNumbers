@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using RDOXMES.Data;
-using RDOXMES.Models;
+using RDOXMES.PartNumbers;
 
-namespace RDOXMES.Controllers;
+namespace RDOXMES.PartNumbers;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -26,11 +25,15 @@ public class PartNumbersController : ControllerBase
         try
         {
             if (id != updatedPart.Id)
+            {
                 return BadRequest("El Id proporcionado no coincide con el Id del Numero de Parte.");
+            }
 
             var existingPart = await partNumberDbContext.PartNumbers.FindAsync(id);
             if (existingPart == null)
+            {
                 return NotFound($"No se encontró PartNumber con Id: {id}.");
+            }
 
             // Normalización y validación opcional
             var newPartNumber = updatedPart.PartNumber.Trim().ToLower();
@@ -47,13 +50,11 @@ public class PartNumbersController : ControllerBase
             return NoContent();
         }
         catch (DbUpdateException ex)
-        {
-            // Error al guardar en la base de datos
+        {            
             return StatusCode(503, new { mensaje = "Error al acceder a la base de datos. Intenta más tarde.", detalle = ex.Message });
         }
         catch (Exception ex)
-        {
-            // Cualquier otro error inesperado
+        {         
             return StatusCode(500, new { mensaje = "Error interno del servidor", detalle = ex.Message });
         }
     }
@@ -66,7 +67,10 @@ public class PartNumbersController : ControllerBase
         {
             var part = await partNumberDbContext.PartNumbers.FindAsync(id);
             if (part == null)
+            {
                 return NotFound($"No se encontró Numero de Parte con Id: {id}.");
+            }
+
             return Ok(part);
         }
         catch (DbUpdateException ex)

@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RDOXMES.Models;
+namespace RDOXMES.PartNumbers;
 
 [Table("dtPartNumbers")]
 public class PartNumberClass
