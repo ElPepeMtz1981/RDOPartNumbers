@@ -74,13 +74,11 @@ public class PartNumbersController : ControllerBase
             return Ok(part);
         }
         catch (DbUpdateException ex)
-        {
-            // Error al guardar en la base de datos
+        {            
             return StatusCode(503, new { mensaje = "Error al acceder a la base de datos. Intenta más tarde.", detalle = ex.Message });
         }
         catch (Exception ex)
-        {
-            // Cualquier otro error inesperado
+        {           
             return StatusCode(500, new { mensaje = "Error interno del servidor", detalle = ex.Message });
         }
     }
