@@ -32,7 +32,7 @@ if (string.IsNullOrWhiteSpace(connection) || connection.Contains("USE_ENV_VARIAB
 }
 else
 {
-    Console.WriteLine($"Conexión detectada desde entorno: {connection.Split(';')[0]}");
+    Console.WriteLine($"string connection: {connection.Split(';')[0]}");
 }
 
 var app = builder.Build();
