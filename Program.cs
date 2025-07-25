@@ -73,16 +73,16 @@ else
     Console.WriteLine($"JWT: {jwtKey}");
 }
 
-var urls = builder.Configuration["ASPNETCORE_URLS"];
-if (string.IsNullOrWhiteSpace(urls) || urls.Contains("USE_ENV_VARIABLE"))
-{
-    builder.Logging.AddConsole();
-    Console.WriteLine("ASPNETCORE_URLS not loaded.");
-}
-else
-{
-    Console.WriteLine($"ASPNETCORE_URLS: {urls}");
-}
+//var urls = builder.Configuration["ASPNETCORE_URLS"];
+//if (string.IsNullOrWhiteSpace(urls) || urls.Contains("USE_ENV_VARIABLE"))
+//{
+//    builder.Logging.AddConsole();
+//    Console.WriteLine("ASPNETCORE_URLS not loaded.");
+//}
+//else
+//{
+//    Console.WriteLine($"ASPNETCORE_URLS: {urls}");
+//}
 
 var kestrelSection = builder.Configuration.GetSection("Kestrel");
 if (kestrelSection.Exists())
