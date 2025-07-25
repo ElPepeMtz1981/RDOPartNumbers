@@ -23,22 +23,30 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<PartNumbersDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("PartNumbers")));
 builder.Services.AddEndpointsApiExplorer();
 
-if (!builder.Environment.IsDevelopment())
+var portStr = Environment.GetEnvironmentVariable("API_PORT") ?? "5000";
+var port = int.Parse(portStr);
+
+builder.WebHost.ConfigureKestrel(options =>
 {
-    Console.WriteLine("Development");
-    builder.WebHost.ConfigureKestrel(options =>
-    {
-        options.ListenLocalhost(5000); // HTTP
-        options.ListenLocalhost(5001, listenOptions =>
-        {
-            listenOptions.UseHttps(); // Certificado de desarrollo
-        });
-    });
-}
-else
-{
-    Console.WriteLine("Production");
-}
+    options.ListenLocalhost(port);
+});
+
+//if (builder.Environment.IsDevelopment())
+//{
+//    Console.WriteLine("Development");
+//    builder.WebHost.ConfigureKestrel(options =>
+//    {
+//        options.ListenLocalhost(5000); // HTTP
+//        options.ListenLocalhost(5001, listenOptions =>
+//        {
+//            listenOptions.UseHttps(); // Certificado de desarrollo
+//        });
+//    });
+//}
+//else
+//{
+//    Console.WriteLine("Production");
+//}
 
 builder.Services.AddSwaggerGen();
 
