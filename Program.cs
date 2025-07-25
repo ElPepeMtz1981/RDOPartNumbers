@@ -23,31 +23,31 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<PartNumbersDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("PartNumbers")));
 builder.Services.AddEndpointsApiExplorer();
 
-var apiPortString = Environment.GetEnvironmentVariable("API_PORT") ?? "5000";
-Console.WriteLine($"API_PORT: {apiPortString}");
-var port = int.Parse(apiPortString);
+//var apiPortString = Environment.GetEnvironmentVariable("API_PORT") ?? "5000";
+//Console.WriteLine($"API_PORT: {apiPortString}");
+//var port = int.Parse(apiPortString);
 
-builder.WebHost.ConfigureKestrel(options =>
+//builder.WebHost.ConfigureKestrel(options =>
+//{
+//    options.ListenLocalhost(port);
+//});
+
+if (builder.Environment.IsDevelopment())
 {
-    options.ListenLocalhost(port);
-});
-
-//if (builder.Environment.IsDevelopment())
-//{
-//    Console.WriteLine("Development");
-//    builder.WebHost.ConfigureKestrel(options =>
-//    {
-//        options.ListenLocalhost(5000); // HTTP
-//        options.ListenLocalhost(5001, listenOptions =>
-//        {
-//            listenOptions.UseHttps(); // Certificado de desarrollo
-//        });
-//    });
-//}
-//else
-//{
-//    Console.WriteLine("Production");
-//}
+    Console.WriteLine("Development");
+    builder.WebHost.ConfigureKestrel(options =>
+    {
+        options.ListenLocalhost(5000); // HTTP
+        options.ListenLocalhost(5001, listenOptions =>
+        {
+            listenOptions.UseHttps(); // Certificado de desarrollo
+        });
+    });
+}
+else
+{
+    Console.WriteLine("Production");
+}
 
 builder.Services.AddSwaggerGen();
 
