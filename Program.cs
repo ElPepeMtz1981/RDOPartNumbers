@@ -23,35 +23,35 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<PartNumbersDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("PartNumbers")));
 builder.Services.AddEndpointsApiExplorer();
 
-//var apiPortString = Environment.GetEnvironmentVariable("API_PORT") ?? "5000";
-//Console.WriteLine($"API_PORT: {apiPortString}");
-//var port = int.Parse(apiPortString);
+var apiPortString = Environment.GetEnvironmentVariable("API_PORT") ?? "5000";
+Console.WriteLine($"API_PORT: {apiPortString}");
+var port = int.Parse(apiPortString);
 
-//builder.WebHost.ConfigureKestrel(options =>
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenLocalhost(port);
+});
+
+//if (builder.Environment.IsDevelopment())
 //{
-//    options.ListenLocalhost(port);
-//});
-
-if (builder.Environment.IsDevelopment())
-{
-    Console.WriteLine("Development");
-    builder.WebHost.ConfigureKestrel(options =>
-    {
-        options.ListenLocalhost(5000); // HTTP
-        options.ListenLocalhost(5001, listenOptions =>
-        {
-            listenOptions.UseHttps(); // Certificado de desarrollo
-        });
-    });
-}
-else
-{
-    Console.WriteLine("Production");
-}
+//    Console.WriteLine("Development");
+//    builder.WebHost.ConfigureKestrel(options =>
+//    {
+//        options.ListenLocalhost(5000); // HTTP
+//        options.ListenLocalhost(5001, listenOptions =>
+//        {
+//            listenOptions.UseHttps(); // Certificado de desarrollo
+//        });
+//    });
+//}
+//else
+//{
+//    Console.WriteLine("Production");
+//}
 
 builder.Services.AddSwaggerGen();
 
-var connection = builder.Configuration.GetConnectionString("PartNumbers");
+var connection = Environment.GetEnvironmentVariable("ConnectionStrings__PartNumbers");
 if (string.IsNullOrWhiteSpace(connection) || connection.Contains("USE_ENV_VARIABLE"))
 {
     builder.Logging.AddConsole();
@@ -62,7 +62,7 @@ else
     Console.WriteLine($"String connection: {connection}");
 }
 
-var jwtKey = builder.Configuration["Jwt:Key"];
+var jwtKey = Environment.GetEnvironmentVariable("Jwt__Key");
 if (string.IsNullOrWhiteSpace(jwtKey) || jwtKey.Contains("USE_ENV_VARIABLE"))
 {
     builder.Logging.AddConsole();
@@ -84,29 +84,29 @@ else
 //    Console.WriteLine($"ASPNETCORE_URLS: {urls}");
 //}
 
-var kestrelSection = builder.Configuration.GetSection("Kestrel");
-if (kestrelSection.Exists())
-{
-    Console.WriteLine("Kestrel configuration found via IConfiguration:");
-    foreach (var child in kestrelSection.GetChildren())
-    {
-        Console.WriteLine($"{child.Key}: {child.Value}");
-    }
-}
-else
-{
-    Console.WriteLine("No Kestrel configuration found in IConfiguration.");
-}
+//var kestrelSection = builder.Configuration.GetSection("Kestrel");
+//if (kestrelSection.Exists())
+//{
+//    Console.WriteLine("Kestrel configuration found via IConfiguration:");
+//    foreach (var child in kestrelSection.GetChildren())
+//    {
+//        Console.WriteLine($"{child.Key}: {child.Value}");
+//    }
+//}
+//else
+//{
+//    Console.WriteLine("No Kestrel configuration found in IConfiguration.");
+//}
 
-var endpointsSection = builder.Configuration.GetSection("Kestrel:Endpoints");
-foreach (var endpoint in endpointsSection.GetChildren())
-{
-    Console.WriteLine($"Endpoint: {endpoint.Key}");
-    foreach (var setting in endpoint.GetChildren())
-    {
-        Console.WriteLine($"  {setting.Key}: {setting.Value}");
-    }
-}
+//var endpointsSection = builder.Configuration.GetSection("Kestrel:Endpoints");
+//foreach (var endpoint in endpointsSection.GetChildren())
+//{
+//    Console.WriteLine($"Endpoint: {endpoint.Key}");
+//    foreach (var setting in endpoint.GetChildren())
+//    {
+//        Console.WriteLine($"  {setting.Key}: {setting.Value}");
+//    }
+//}
 
 var app = builder.Build();
 
