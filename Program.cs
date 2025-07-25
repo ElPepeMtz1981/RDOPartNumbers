@@ -2,7 +2,7 @@
 using RDOXMES.PartNumbers;
 
 Console.WriteLine("*******");
-Console.WriteLine("*******");
+Console.WriteLine("By SoftwarechidoMx");
 Console.WriteLine();
 Console.WriteLine("Start Program.cs");
 
@@ -28,15 +28,6 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<PartNumbersDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("PartNumbers")));
 builder.Services.AddEndpointsApiExplorer();
 
-//var apiPortString = Environment.GetEnvironmentVariable("API_PORT") ?? "5000";
-//Console.WriteLine($"API_PORT: {apiPortString}");
-//var port = int.Parse(apiPortString);
-
-//builder.WebHost.ConfigureKestrel(options =>
-//{
-//    options.ListenLocalhost(port);
-//});
-
 if (builder.Environment.IsDevelopment())
 {
     Console.WriteLine("Development");
@@ -48,10 +39,6 @@ if (builder.Environment.IsDevelopment())
             listenOptions.UseHttps(); // Certificado de desarrollo
         });
     });
-}
-else
-{
-    Console.WriteLine("Production");
 }
 
 builder.Services.AddSwaggerGen();
@@ -116,12 +103,6 @@ foreach (var endpoint in endpointsSection.GetChildren())
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
-
-//app.UseRouting();
-//app.UseEndpoints(endpoints =>
-//{
-//    endpoints.MapControllers();
-//});
 
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
