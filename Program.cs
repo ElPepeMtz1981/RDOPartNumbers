@@ -67,7 +67,7 @@ if (string.IsNullOrWhiteSpace(urls) || urls.Contains("USE_ENV_VARIABLE"))
 }
 else
 {
-    Console.WriteLine($"ASPNETCORE_URLS: {urls[0]}");
+    Console.WriteLine($"ASPNETCORE_URLS: {urls}");
 }
 
 var app = builder.Build();
