@@ -25,6 +25,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 if (builder.Environment.IsDevelopment())
 {
+    Console.WriteLine("Development");
     builder.WebHost.ConfigureKestrel(options =>
     {
         options.ListenLocalhost(5000); // HTTP
@@ -34,8 +35,12 @@ if (builder.Environment.IsDevelopment())
         });
     });
 }
+else
+{
+    Console.WriteLine("Production");
+}
 
-builder.Services.AddSwaggerGen();
+    builder.Services.AddSwaggerGen();
 
 var connection = builder.Configuration.GetConnectionString("PartNumbers");
 if (string.IsNullOrWhiteSpace(connection) || connection.Contains("USE_ENV_VARIABLE"))
@@ -71,6 +76,7 @@ else
 }
 
 var app = builder.Build();
+
 app.UseMiddleware<ExceptionMiddleware>();
 
 //app.UseRouting();
