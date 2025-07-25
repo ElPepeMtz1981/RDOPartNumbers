@@ -75,6 +75,20 @@ else
     Console.WriteLine($"ASPNETCORE_URLS: {urls}");
 }
 
+var kestrelSection = builder.Configuration.GetSection("Kestrel");
+if (kestrelSection.Exists())
+{
+    Console.WriteLine("Kestrel configuration found via IConfiguration:");
+    foreach (var child in kestrelSection.GetChildren())
+    {
+        Console.WriteLine($"{child.Key}: {child.Value}");
+    }
+}
+else
+{
+    Console.WriteLine("No Kestrel configuration found in IConfiguration.");
+}
+
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
