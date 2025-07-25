@@ -89,6 +89,16 @@ else
     Console.WriteLine("No Kestrel configuration found in IConfiguration.");
 }
 
+var endpointsSection = builder.Configuration.GetSection("Kestrel:Endpoints");
+foreach (var endpoint in endpointsSection.GetChildren())
+{
+    Console.WriteLine($"Endpoint: {endpoint.Key}");
+    foreach (var setting in endpoint.GetChildren())
+    {
+        Console.WriteLine($"  {setting.Key}: {setting.Value}");
+    }
+}
+
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
