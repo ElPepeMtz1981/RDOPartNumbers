@@ -22,17 +22,47 @@ builder.Configuration
 builder.Services.AddControllers();
 builder.Services.AddDbContext<PartNumbersDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("PartNumbers")));
 builder.Services.AddEndpointsApiExplorer();
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenLocalhost(5000); // HTTP
+    options.ListenLocalhost(5001, listenOptions =>
+    {
+        listenOptions.UseHttps(); // HTTPS con certificado de desarrollo
+    });
+});
 builder.Services.AddSwaggerGen();
 
 var connection = builder.Configuration.GetConnectionString("PartNumbers");
 if (string.IsNullOrWhiteSpace(connection) || connection.Contains("USE_ENV_VARIABLE"))
 {
     builder.Logging.AddConsole();
-    Console.WriteLine("La cadena de conexión no fue cargada desde el entorno.");
+    Console.WriteLine("String connection not loaded.");
 }
 else
 {
-    Console.WriteLine($"string connection: {connection.Split(';')[0]}");
+    Console.WriteLine($"String connection: {connection.Split(';')[0]}");
+}
+
+var jwtKey = builder.Configuration["Jwt:Key"];
+if (string.IsNullOrWhiteSpace(jwtKey) || jwtKey.Contains("USE_ENV_VARIABLE"))
+{
+    builder.Logging.AddConsole();
+    Console.WriteLine("JWT not loaded.");
+}
+else
+{
+    Console.WriteLine($"JWT: {jwtKey[0]}");
+}
+
+var urls = builder.Configuration["ASPNETCORE_URLS"];
+if (string.IsNullOrWhiteSpace(urls) || urls.Contains("USE_ENV_VARIABLE"))
+{
+    builder.Logging.AddConsole();
+    Console.WriteLine("ASPNETCORE_URLS not loaded.");
+}
+else
+{
+    Console.WriteLine($"ASPNETCORE_URLS: {urls[0]}");
 }
 
 var app = builder.Build();

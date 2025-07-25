@@ -5,21 +5,18 @@ using RDOXMES.PartNumbers;
 namespace RDOXMES.PartNumbers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/partnumbers")]
 public class PartNumbersController : ControllerBase
 {
-    private readonly PartNumbersDbContext partNumberDbContext;
+    private readonly PartNumbersDbContext partNumberDbContext;    
 
-    private readonly ILogger<PartNumbersController> logger;
-
-    public PartNumbersController(PartNumbersDbContext partNumberDbContext, ILogger<PartNumbersController> logger)
+    public PartNumbersController(PartNumbersDbContext partNumberDbContext)
     {
-        this.partNumberDbContext = partNumberDbContext;
-        this.logger = logger;
+        this.partNumberDbContext = partNumberDbContext;        
     }
 
     // PUT api/PartNumbers/{id}
-    [HttpPut("{id:int}")]
+    [HttpPut("update/{id:int}")]
     public async Task<IActionResult> UpdatePartNumber(int id, PartNumberClass updatedPart)
     {
         try
@@ -59,8 +56,8 @@ public class PartNumbersController : ControllerBase
         }
     }
 
-    // GET api/PartNumbers/{id}
-    [HttpGet("{id:int}")]
+    // GET api/PartNumbers/getbyid/{id}
+    [HttpGet("getbyid/{id:int}")]
     public async Task<ActionResult<PartNumberClass>> GetPartNumberById(int id)
     {
         try
@@ -83,8 +80,8 @@ public class PartNumbersController : ControllerBase
         }
     }
 
-    // GET api/PartNumbers/by-pn/{pn}
-    [HttpGet("by-pn/{pn}")]
+    // GET api/PartNumbers/getbypn/{pn}
+    [HttpGet("getbypn/{pn}")]
     public async Task<ActionResult<PartNumberClass>> GetPartNumberByPN(string pn)
     {
         try
@@ -151,7 +148,7 @@ public class PartNumbersController : ControllerBase
         }
     }
 
-    [HttpGet]
+    [HttpGet("getall")]
     public async Task<ActionResult<IEnumerable<PartNumberClass>>> GetPartNumbers()
     {
         try
@@ -159,18 +156,16 @@ public class PartNumbersController : ControllerBase
             return await partNumberDbContext.PartNumbers.ToListAsync();
         }
         catch (DbUpdateException ex)
-        {
-            // Error al guardar en la base de datos
+        {            
             return StatusCode(503, new { mensaje = "Error al acceder a la base de datos. Intenta más tarde.", detalle = ex.Message });
         }
         catch (Exception ex)
-        {
-            // Cualquier otro error inesperado
+        {         
             return StatusCode(500, new { mensaje = "Error interno del servidor", detalle = ex.Message });
         }
     }
 
-    [HttpDelete("{id:int}")]
+    [HttpDelete("deletebyid/{id:int}")]
     public async Task<IActionResult> DeletePartNumber(int id)
     {
         try
@@ -188,12 +183,10 @@ public class PartNumbersController : ControllerBase
         }
         catch (DbUpdateException ex)
         {
-            // Error al guardar en la base de datos
             return StatusCode(503, new { mensaje = "Error al acceder a la base de datos. Intenta más tarde.", detalle = ex.Message });
         }
         catch (Exception ex)
-        {
-            // Cualquier otro error inesperado
+        {            
             return StatusCode(500, new { mensaje = "Error interno del servidor", detalle = ex.Message });
         }
     }
