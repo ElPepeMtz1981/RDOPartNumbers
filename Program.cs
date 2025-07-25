@@ -23,7 +23,7 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<PartNumbersDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("PartNumbers")));
 builder.Services.AddEndpointsApiExplorer();
 
-if (builder.Environment.IsDevelopment())
+if (!builder.Environment.IsDevelopment())
 {
     Console.WriteLine("Development");
     builder.WebHost.ConfigureKestrel(options =>
