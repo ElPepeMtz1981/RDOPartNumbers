@@ -40,7 +40,7 @@ else
     Console.WriteLine("Production");
 }
 
-    builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen();
 
 var connection = builder.Configuration.GetConnectionString("PartNumbers");
 if (string.IsNullOrWhiteSpace(connection) || connection.Contains("USE_ENV_VARIABLE"))
