@@ -1,6 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RDOXMES.PartNumbers;
 
+Console.WriteLine();
+Console.WriteLine();
+Console.WriteLine("Start Program.c");
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
