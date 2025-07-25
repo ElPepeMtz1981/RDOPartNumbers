@@ -23,8 +23,9 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<PartNumbersDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("PartNumbers")));
 builder.Services.AddEndpointsApiExplorer();
 
-var portStr = Environment.GetEnvironmentVariable("API_PORT") ?? "5000";
-var port = int.Parse(portStr);
+var apiPortString = Environment.GetEnvironmentVariable("API_PORT") ?? "5000";
+Console.WriteLine($"API_PORT: {apiPortString}");
+var port = int.Parse(apiPortString);
 
 builder.WebHost.ConfigureKestrel(options =>
 {
