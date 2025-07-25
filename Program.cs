@@ -22,14 +22,19 @@ builder.Configuration
 builder.Services.AddControllers();
 builder.Services.AddDbContext<PartNumbersDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("PartNumbers")));
 builder.Services.AddEndpointsApiExplorer();
-builder.WebHost.ConfigureKestrel(options =>
+
+if (builder.Environment.IsDevelopment())
 {
-    options.ListenLocalhost(5000); // HTTP
-    options.ListenLocalhost(5001, listenOptions =>
+    builder.WebHost.ConfigureKestrel(options =>
     {
-        listenOptions.UseHttps(); // HTTPS con certificado de desarrollo
+        options.ListenLocalhost(5000); // HTTP
+        options.ListenLocalhost(5001, listenOptions =>
+        {
+            listenOptions.UseHttps(); // Certificado de desarrollo
+        });
     });
-});
+}
+
 builder.Services.AddSwaggerGen();
 
 var connection = builder.Configuration.GetConnectionString("PartNumbers");
@@ -40,7 +45,7 @@ if (string.IsNullOrWhiteSpace(connection) || connection.Contains("USE_ENV_VARIAB
 }
 else
 {
-    Console.WriteLine($"String connection: {connection.Split(';')[0]}");
+    Console.WriteLine($"String connection: {connection}");
 }
 
 var jwtKey = builder.Configuration["Jwt:Key"];
@@ -51,7 +56,7 @@ if (string.IsNullOrWhiteSpace(jwtKey) || jwtKey.Contains("USE_ENV_VARIABLE"))
 }
 else
 {
-    Console.WriteLine($"JWT: {jwtKey[0]}");
+    Console.WriteLine($"JWT: {jwtKey}");
 }
 
 var urls = builder.Configuration["ASPNETCORE_URLS"];
