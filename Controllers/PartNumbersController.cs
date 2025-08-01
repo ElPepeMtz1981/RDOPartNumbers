@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using RDOXMES.PartNumbers;
 
 namespace RDOXMES.PartNumbers;
 
@@ -8,11 +7,11 @@ namespace RDOXMES.PartNumbers;
 [Route("api/partnumbers")]
 public class PartNumbersController : ControllerBase
 {
-    private readonly PartNumbersDbContext partNumberDbContext;    
+    private readonly PartNumbersDbContext partNumberDbContext;
 
     public PartNumbersController(PartNumbersDbContext partNumberDbContext)
     {
-        this.partNumberDbContext = partNumberDbContext;        
+        this.partNumberDbContext = partNumberDbContext;
     }
 
     // PUT api/PartNumbers/{id}
@@ -108,7 +107,7 @@ public class PartNumbersController : ControllerBase
     }
 
     [HttpPost("new")]
-    public async Task<ActionResult<PartNumberClass>> PostPartNumber(PartNumberClass partNumber)
+    public async Task<ActionResult<PartNumberClass>> PostPartNumber(PartNumberClass newPartNumber)
     {
         try
         {
@@ -117,24 +116,24 @@ public class PartNumbersController : ControllerBase
                 return BadRequest(ModelState);
             }
 
-            var nombreNormalizado = partNumber.PartNumber.Trim().ToLower();
+            var nombreNormalizado = newPartNumber.PartNumber.Trim().ToLower();
 
             var existe = await partNumberDbContext.PartNumbers
                 .AnyAsync(p => p.PartNumber.Trim().ToLower() == nombreNormalizado);
 
             if (existe)
-                return Conflict($"Ya existe un Numero de Parte con: \"{partNumber.PartNumber}\".");
+                return Conflict($"Ya existe un Numero de Parte con: \"{newPartNumber.PartNumber}\".");
 
             var pn = new PartNumberClass
             {
-                PartNumber = partNumber.PartNumber,
-                Description = partNumber.Description
+                PartNumber = newPartNumber.PartNumber,
+                Description = newPartNumber.Description
             };
 
             partNumberDbContext.PartNumbers.Add(pn);
             await partNumberDbContext.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetPartNumbers), new { id = partNumber.Id }, partNumber);
+            return CreatedAtAction(nameof(GetPartNumberById), new { id = newPartNumber.Id }, newPartNumber);
         }
         catch (DbUpdateException ex)
         {

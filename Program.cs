@@ -8,6 +8,23 @@ Console.WriteLine("Start Program.cs");
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
+    .AddEnvironmentVariables();
+
+var connection = builder.Configuration.GetConnectionString("PartNumbers");
+if (string.IsNullOrWhiteSpace(connection) || connection.Contains("USE_ENV_VARIABLE"))
+{
+    builder.Logging.AddConsole();
+    Console.WriteLine("String connection not loaded.");
+}
+else
+{
+    Console.WriteLine($"String connection: {connection}");
+}
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAllOrigins", policy =>
@@ -18,11 +35,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Configuration
-    .SetBasePath(Directory.GetCurrentDirectory())
-    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
-    .AddEnvironmentVariables();
+
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<PartNumbersDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("PartNumbers")));
@@ -43,16 +56,7 @@ if (builder.Environment.IsDevelopment())
 
 builder.Services.AddSwaggerGen();
 
-var connection = builder.Configuration.GetConnectionString("PartNumbers");
-if (string.IsNullOrWhiteSpace(connection) || connection.Contains("USE_ENV_VARIABLE"))
-{
-    builder.Logging.AddConsole();
-    Console.WriteLine("String connection not loaded.");
-}
-else
-{
-    Console.WriteLine($"String connection: {connection}");
-}
+
 
 var jwtKey = builder.Configuration["Jwt:Key"];
 if (string.IsNullOrWhiteSpace(jwtKey) || jwtKey.Contains("USE_ENV_VARIABLE"))
@@ -113,6 +117,9 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 app.UseCors("AllowAllOrigins");
 
 app.UseHttpsRedirection();
+
 app.UseAuthorization();
+
 app.MapControllers();
+
 app.Run();
