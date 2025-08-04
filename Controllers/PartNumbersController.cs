@@ -133,7 +133,7 @@ public class PartNumbersController : ControllerBase
             partNumberDbContext.PartNumbers.Add(pn);
             await partNumberDbContext.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetPartNumberById), new { id = newPartNumber.Id }, newPartNumber);
+            return CreatedAtAction(nameof(GetPartNumberById), new { id = pn.Id }, pn);
         }
         catch (DbUpdateException ex)
         {
