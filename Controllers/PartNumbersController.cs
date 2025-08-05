@@ -116,18 +116,18 @@ public class PartNumbersController : ControllerBase
                 return BadRequest(ModelState);
             }
 
-            var nombreNormalizado = newPartNumber.PartNumber.Trim().ToLower();
+            var nombreNormalizado = newPartNumber.PartNumber.Trim().ToUpper();
 
             var existe = await partNumberDbContext.PartNumbers
-                .AnyAsync(p => p.PartNumber.Trim().ToLower() == nombreNormalizado);
+                .AnyAsync(p => p.PartNumber.Trim().ToUpper() == nombreNormalizado);
 
             if (existe)
                 return Conflict($"Ya existe un Numero de Parte con: \"{newPartNumber.PartNumber}\".");
 
             var pn = new PartNumberClass
             {
-                PartNumber = newPartNumber.PartNumber,
-                Description = newPartNumber.Description
+                PartNumber = newPartNumber.PartNumber.ToUpper(),
+                Description = newPartNumber.Description.ToUpper()
             };
 
             partNumberDbContext.PartNumbers.Add(pn);
