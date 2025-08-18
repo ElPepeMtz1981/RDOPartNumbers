@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RDOXMES.Data;
 using RDOXMES.PartNumbers;
 
 Console.WriteLine("*******");
@@ -37,6 +38,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<PartNumbersDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("PartNumbers")));
+builder.Services.AddDbContext<InventoryDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("PartNumbers")));
 builder.Services.AddEndpointsApiExplorer();
 
 if (builder.Environment.IsDevelopment())
@@ -53,7 +55,6 @@ if (builder.Environment.IsDevelopment())
 }
 
 builder.Services.AddSwaggerGen();
-
 
 
 var jwtKey = builder.Configuration["Jwt:Key"];

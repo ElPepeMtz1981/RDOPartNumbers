@@ -118,10 +118,10 @@ public class PartNumbersController : ControllerBase
 
             var nombreNormalizado = newPartNumber.PartNumber.Trim().ToUpper();
 
-            var existe = await partNumberDbContext.PartNumbers
+            var exist = await partNumberDbContext.PartNumbers
                 .AnyAsync(p => p.PartNumber.Trim().ToUpper() == nombreNormalizado);
 
-            if (existe)
+            if (exist)
                 return Conflict($"Ya existe un Numero de Parte con: \"{newPartNumber.PartNumber}\".");
 
             var pn = new PartNumberClass
@@ -160,6 +160,40 @@ public class PartNumbersController : ControllerBase
         }
         catch (Exception ex)
         {         
+            return StatusCode(500, new { mensaje = "Error interno del servidor", detalle = ex.Message });
+        }
+    }
+
+    [HttpGet("getallbydescription")]
+    public async Task<ActionResult<IEnumerable<PartNumberClass>>> GetPartNumbersByDescription()
+    {
+        try
+        {
+            return await partNumberDbContext.PartNumbers.OrderBy(pn => pn.Description).ToListAsync();
+        }
+        catch (DbUpdateException ex)
+        {
+            return StatusCode(503, new { mensaje = "Error al acceder a la base de datos. Intenta más tarde.", detalle = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { mensaje = "Error interno del servidor", detalle = ex.Message });
+        }
+    }
+
+    [HttpGet("getallbyid")]
+    public async Task<ActionResult<IEnumerable<PartNumberClass>>> GetPartNumbersById()
+    {
+        try
+        {
+            return await partNumberDbContext.PartNumbers.OrderBy(pn => pn.Id).ToListAsync();
+        }
+        catch (DbUpdateException ex)
+        {
+            return StatusCode(503, new { mensaje = "Error al acceder a la base de datos. Intenta más tarde.", detalle = ex.Message });
+        }
+        catch (Exception ex)
+        {
             return StatusCode(500, new { mensaje = "Error interno del servidor", detalle = ex.Message });
         }
     }
