@@ -124,16 +124,16 @@ public class PartNumbersController : ControllerBase
             if (exist)
                 return Conflict($"Ya existe un Numero de Parte con: \"{newPartNumber.PartNumber}\".");
 
-            var pn = new PartNumberClass
+            var partNumberToInsert = new PartNumberClass
             {
                 PartNumber = newPartNumber.PartNumber.ToUpper(),
                 Description = newPartNumber.Description.ToUpper()
             };
 
-            partNumberDbContext.PartNumbers.Add(pn);
+            partNumberDbContext.PartNumbers.Add(partNumberToInsert);
             await partNumberDbContext.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetPartNumberById), new { id = pn.Id }, pn);
+            return CreatedAtAction(nameof(GetPartNumberById), new { id = partNumberToInsert.Id }, partNumberToInsert);
         }
         catch (DbUpdateException ex)
         {
