@@ -7,5 +7,5 @@ public class PartNumbersDbContext : DbContext
 {
     public PartNumbersDbContext(DbContextOptions<PartNumbersDbContext> options) : base(options) { }
 
-    public DbSet<PartNumberClass> PartNumbers { get; set; }
+    public DbSet<PartNumbers> PartNumbers { get; set; }
 }

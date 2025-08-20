@@ -16,7 +16,7 @@ public class PartNumbersController : ControllerBase
 
     // PUT api/PartNumbers/{id}
     [HttpPut("update/{id:int}")]
-    public async Task<IActionResult> UpdatePartNumber(int id, PartNumberClass updatedPart)
+    public async Task<IActionResult> UpdatePartNumber(int id, PartNumbers updatedPart)
     {
         try
         {
@@ -57,7 +57,7 @@ public class PartNumbersController : ControllerBase
 
     // GET api/PartNumbers/getbyid/{id}
     [HttpGet("getbyid/{id:int}")]
-    public async Task<ActionResult<PartNumberClass>> GetPartNumberById(int id)
+    public async Task<ActionResult<PartNumbers>> GetPartNumberById(int id)
     {
         try
         {
@@ -81,7 +81,7 @@ public class PartNumbersController : ControllerBase
 
     // GET api/PartNumbers/getbypn/{pn}
     [HttpGet("getbypn/{pn}")]
-    public async Task<ActionResult<PartNumberClass>> GetPartNumberByPN(string pn)
+    public async Task<ActionResult<PartNumbers>> GetPartNumberByPN(string pn)
     {
         try
         {
@@ -107,7 +107,7 @@ public class PartNumbersController : ControllerBase
     }
 
     [HttpPost("new")]
-    public async Task<ActionResult<PartNumberClass>> PostPartNumber(PartNumberClass newPartNumber)
+    public async Task<ActionResult<PartNumbers>> PostPartNumber(PartNumbers newPartNumber)
     {
         try
         {
@@ -124,7 +124,7 @@ public class PartNumbersController : ControllerBase
             if (exist)
                 return Conflict($"Ya existe un Numero de Parte con: \"{newPartNumber.PartNumber}\".");
 
-            var partNumberToInsert = new PartNumberClass
+            var partNumberToInsert = new PartNumbers
             {
                 PartNumber = newPartNumber.PartNumber.ToUpper(),
                 Description = newPartNumber.Description.ToUpper()
@@ -148,7 +148,7 @@ public class PartNumbersController : ControllerBase
     }
 
     [HttpGet("getall")]
-    public async Task<ActionResult<IEnumerable<PartNumberClass>>> GetPartNumbers()
+    public async Task<ActionResult<IEnumerable<PartNumbers>>> GetPartNumbers()
     {
         try
         {
@@ -165,7 +165,7 @@ public class PartNumbersController : ControllerBase
     }
 
     [HttpGet("getallbydescription")]
-    public async Task<ActionResult<IEnumerable<PartNumberClass>>> GetPartNumbersByDescription()
+    public async Task<ActionResult<IEnumerable<PartNumbers>>> GetPartNumbersByDescription()
     {
         try
         {
@@ -182,7 +182,7 @@ public class PartNumbersController : ControllerBase
     }
 
     [HttpGet("getallbyid")]
-    public async Task<ActionResult<IEnumerable<PartNumberClass>>> GetPartNumbersById()
+    public async Task<ActionResult<IEnumerable<PartNumbers>>> GetPartNumbersById()
     {
         try
         {
